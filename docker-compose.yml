@@ -3,7 +3,7 @@ services:
     image: postgres:15
     container_name: services_db
     environment:
-      POSTGRES_DB: Recipes
+      POSTGRES_DB: recipe
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
