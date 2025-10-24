@@ -17,4 +17,6 @@ public class Recipe {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+
 }
