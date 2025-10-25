@@ -24,6 +24,7 @@ public class Recipe {
     @Column(nullable = false)
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
 
