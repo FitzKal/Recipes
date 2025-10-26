@@ -18,6 +18,7 @@ public class UserService {
     // CREATE
     public BasicUserDto saveUser(BasicUserDto basicUserDto) {
         var userToSave = basicUserDtoConverter.convertBasicUserDtoToUser(basicUserDto);
+        System.out.println(userToSave);
         userRepo.save(userToSave);
         return basicUserDto;
     }
