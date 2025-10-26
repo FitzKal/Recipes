@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
@@ -22,10 +23,20 @@ public class User {
     @Column
     private String password;
 
-    // kapcsolat a Recipe entitáshoz (ha még nincs meg, majd később hozzáadod)
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Recipe> recipes;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public void addRecipe(Recipe recipe){
+        recipe.setUser(this);
+        recipes.add(recipe);
+    }
+
+    public void removeRecipe(Recipe recipe){
+        recipe.setUser(null);
+        recipes.remove(recipe);
+    }
 }

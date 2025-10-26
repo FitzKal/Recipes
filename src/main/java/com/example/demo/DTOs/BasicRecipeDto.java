@@ -2,6 +2,7 @@ package com.example.demo.DTOs;
 
 import com.example.demo.model.Category;
 import com.example.demo.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,6 @@ public class BasicRecipeDto {
     private String description;
     private Category category;
     private String pictureSrc;
+    @JsonIgnore
     private User user;
 }

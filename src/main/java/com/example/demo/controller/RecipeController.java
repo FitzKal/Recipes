@@ -16,9 +16,9 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping
-    public ResponseEntity<BasicRecipeDto> createRecipe(@NonNull @RequestBody BasicRecipeDto basicRecipeDto) {
+    public ResponseEntity<BasicRecipeDto> createRecipe(@NonNull @RequestBody BasicRecipeDto basicRecipeDto, @RequestParam String username) {
         System.out.println(basicRecipeDto);
-        return ResponseEntity.ok(recipeService.createRecipe(basicRecipeDto));
+        return ResponseEntity.ok(recipeService.createRecipe(basicRecipeDto,username));
     }
 
     @GetMapping("/{id}")
