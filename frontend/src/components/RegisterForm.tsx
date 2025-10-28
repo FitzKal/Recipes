@@ -1,16 +1,19 @@
-import {type SubmitHandler, useForm} from 'react-hook-form';
 import type {AuthFormFields} from "../Types/FormTypes.ts";
-import {Link} from "react-router-dom";
+import {type SubmitHandler, useForm} from 'react-hook-form';
 import "../styles/AuthForm.css";
+import {Link} from "react-router-dom";
 
-export default function LoginForm(){
-    const{register, handleSubmit, formState:{errors, isSubmitting}} = useForm<AuthFormFields>();
-    const onSubmit: SubmitHandler<AuthFormFields> = (data) =>{
-        console.log(data);
+
+export default function RegisterForm(){
+    const {register,handleSubmit ,formState:{errors, isSubmitting}} = useForm<AuthFormFields>();
+
+    const onSubmit:SubmitHandler<AuthFormFields> = (data) =>{
+        console.log(data)
     }
+
     return(
         <div className={"container"}>
-                <h1 className={"HeaderText"}>Sign in</h1>
+            <h1 className={"HeaderText"}>Register</h1>
             <div className={"FormContainer"}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={"formBody"}>
@@ -29,10 +32,7 @@ export default function LoginForm(){
                     </div>
                 </form>
             </div>
-            <Link className={"redirectAuthLink"} to={"/register"}>New to the website? Register!</Link>
+            <Link className={"redirectAuthLink"} to={"/"}>Already have an account? Sign in!</Link>
         </div>
-
-
     );
-
 }
