@@ -19,11 +19,18 @@ export default function RegisterForm(){
                     <div className={"formBody"}>
                         <input {...register("username",{
                             required : "Username is required",
-                            minLength: 4
+                            minLength:{
+                                value: 4,
+                                message: "The username should be at least 4 characters long"
+                            }
                         })} type={"text"} placeholder={"Username"} className={"textInput"}/>
                         {errors.username &&( <div className={"text-danger"}>{errors.username.message}</div>)}
                         <input {...register("password",{
-                            required :"Password is required"
+                            required :"Password is required",
+                            minLength:{
+                                value: 8,
+                                message: "The given password is too weak"
+                            }
                         })} type={"password"} placeholder={"Password"} className={"textInput"}/>
                         {errors.password &&( <div className={"text-danger"}>{errors.password.message}</div>)}
                         <button type={"submit"} disabled={isSubmitting} className={"submitButton"}>
