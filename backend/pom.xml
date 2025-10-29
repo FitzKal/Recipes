@@ -26,7 +26,7 @@
 		<lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
 
 		<!-- JWT lib version -->
-		<jjwt.version>0.11.5</jjwt.version>
+		<jjwt.version>0.12.6</jjwt.version>
 	</properties>
 
 	<dependencies>
