@@ -7,6 +7,7 @@ import com.example.demo.DTOs.RegisterResponseDto;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepo;
+import com.example.demo.security.PasswordEncrypter;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepo userRepo;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncrypter passwordEncrypter;
+    private final JWTService jwtService;
 
     // REGISTER -> username + role + (kesobb) token
     public RegisterResponseDto register(RegisterRequestDto req) {
@@ -26,13 +28,12 @@ public class AuthService {
 
         User user = new User();
         user.setUsername(req.getUsername());
-        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setPassword(passwordEncrypter.passwordEncoder().encode(req.getPassword()));
         user.setRole(Role.USER); // alapértelmezett szerep
-
         userRepo.save(user);
 
         // TODO: ha kész a JWT service, itt kell generalni tokent
-        String token = null;
+        String token = jwtService.generateToken(req.getUsername());
 
         return RegisterResponseDto.builder()
                 .username(user.getUsername())
@@ -47,12 +48,12 @@ public class AuthService {
         if (user == null) {
             throw new RuntimeException("User not found!");
         }
-        if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
+        if (!passwordEncrypter.passwordEncoder().matches(req.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid password!");
         }
 
         // TODO: ha kész a JWT service, itt kell generalni tokent
-        String token = null;
+        String token = jwtService.generateToken(user.getUsername());
 
         return LoginResponseDto.builder()
                 .username(user.getUsername())
