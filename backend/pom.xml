@@ -24,6 +24,9 @@
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<lombok.version>1.18.40</lombok.version>
 		<lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
+
+		<!-- JWT lib version -->
+		<jjwt.version>0.12.6</jjwt.version>
 	</properties>
 
 	<dependencies>
@@ -41,6 +44,17 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+        <!-- Security (for password encryption etc.) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+		<!-- Security (needed for JWT auth filters, SecurityFilterChain, etc.) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
 		<!-- Lombok (compile-time only) -->
@@ -76,7 +90,7 @@
 			<artifactId>flyway-database-postgresql</artifactId>
 		</dependency>
 
-		<!-- MapStruct API (you use these interfaces in code) -->
+		<!-- MapStruct API -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -95,6 +109,34 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
+		<!-- ===================== JWT block ===================== -->
+
+		<!-- Public API (JwtBuilder, Jwts.parserBuilder, etc.) -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jjwt.version}</version>
+		</dependency>
+
+		<!-- Runtime implementation (signing, parsing, crypto).
+             Keep scope runtime so it doesn't leak into compile classpath twice. -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jjwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Uses Jackson to (de)serialize claims payload to/from JSON -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jjwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- =================== end JWT block =================== -->
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -112,7 +154,7 @@
 	<build>
 		<plugins>
 
-			<!-- Spring Boot plugin (so you can build/run the jar easily) -->
+			<!-- Spring Boot plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -143,8 +185,7 @@
 							<version>${lombok.version}</version>
 						</path>
 
-						<!-- This makes MapStruct "see" Lombok-generated getters/setters
-                             during the same compile step (fixes the Unknown property ... error) -->
+						<!-- Make MapStruct understand Lombok-generated getters/setters -->
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok-mapstruct-binding</artifactId>
