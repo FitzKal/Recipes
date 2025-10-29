@@ -9,7 +9,6 @@ import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepo;
 import com.example.demo.security.PasswordEncrypter;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +37,7 @@ public class AuthService {
         return RegisterResponseDto.builder()
                 .username(user.getUsername())
                 .role(user.getRole().name())
-                .token(token)
+                .accessToken(token)
                 .build();
     }
 
@@ -58,7 +57,7 @@ public class AuthService {
         return LoginResponseDto.builder()
                 .username(user.getUsername())
                 .role(user.getRole().name())
-                .token(token)
+                .accessToken(token)
                 .build();
     }
 }

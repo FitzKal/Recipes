@@ -1,12 +1,24 @@
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    padding-top: 170px;
+    margin: auto;
+}
+
 .FormContainer{
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 
 .formBody{
     display: flex;
     flex-direction: column;
     gap: 1em;
+    width: 100%;
 }
 
 .HeaderText{
@@ -31,14 +43,13 @@
     transform: scale(1.03);
 }
 
-.container{
-    padding-top: 170px;
-}
 
 .textInput{
     width: 500px;
     height: 40px;
+    border: 1px solid black;
     border-radius: 8px;
+    text-align: center;
 }
 
 .redirectAuthLink{
