@@ -2,13 +2,14 @@ import type {AuthFormFields} from "../Types/FormTypes.ts";
 import {type SubmitHandler, useForm} from 'react-hook-form';
 import "../styles/AuthForm.css";
 import {Link} from "react-router-dom";
+import {createUser} from "../service/userService.ts";
 
 
 export default function RegisterForm(){
     const {register,handleSubmit ,formState:{errors, isSubmitting}} = useForm<AuthFormFields>();
 
-    const onSubmit:SubmitHandler<AuthFormFields> = (data) =>{
-        console.log(data)
+    const onSubmit:SubmitHandler<AuthFormFields> = async (data) =>{
+        await createUser(data);
     }
 
     return(

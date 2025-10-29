@@ -5,7 +5,9 @@ export interface User{
     username:string,
     password: string,
     recipes:Recipe[],
-    role: "ADMIN" | "USER"
+    role?: "ADMIN" | "USER",
+    accessToken: string;
+
 }
 
 export type userListProp = {
@@ -14,4 +16,9 @@ export type userListProp = {
 
 export type userProp = {
     userInfo : User
+}
+
+export type userAuthRequest  = {
+    username: string,
+    password: string
 }
