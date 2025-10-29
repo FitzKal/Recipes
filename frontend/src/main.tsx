@@ -1,4 +1,6 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import './styles/main.css';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
@@ -6,6 +8,8 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import LoginForm from "./components/LoginForm.tsx";
 import RegisterForm from "./components/RegisterForm.tsx";
 import App from "./App.tsx";
+import Homepage from "./components/Homepage.tsx";
+
 
 const router = createBrowserRouter([{
     path:'/',
@@ -19,6 +23,11 @@ const router = createBrowserRouter([{
     {
       path: "/recipes",
       element:<App />
+    },
+    {
+        path:"/home",
+        element: <Homepage />
+
     }
     ]);
 

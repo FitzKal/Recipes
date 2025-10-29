@@ -2,15 +2,43 @@ import {type SubmitHandler, useForm} from 'react-hook-form';
 import type {AuthFormFields} from "../Types/FormTypes.ts";
 import {Link} from "react-router-dom";
 import "../styles/AuthForm.css";
+import {userLogin} from "../service/AuthServices.ts";
+import {useMutation} from "@tanstack/react-query";
+import type {userAuthRequest} from "../Types/User.ts";
+import {userStore} from "../Stores/UserStore.ts";
+import {useNavigate} from "react-router-dom";
+
 
 export default function LoginForm(){
     const{register, handleSubmit, formState:{errors, isSubmitting}} = useForm<AuthFormFields>();
-    const onSubmit: SubmitHandler<AuthFormFields> = (data) =>{
-        console.log(data);
+    const navigate = useNavigate();
+
+
+    const mutation = useMutation({
+        mutationFn:(data:userAuthRequest) =>
+            userLogin(data),
+        onSuccess:(result,variables) =>{
+            userStore.getState().stateLogin({
+                accessToken: result.accessToken,
+                username:variables.username,
+                role:result.role
+            });
+        navigate("/home")
+    },
+        onError:(error) =>{
+            if (error instanceof Error){
+                alert(error.message);
+            }else {
+                alert("Something went wrong");
+            }
+        }
+    })
+    const onSubmit: SubmitHandler<AuthFormFields> = async (data) =>{
+        mutation.mutate(data);
     }
     return(
         <div className={"container"}>
-                <h1 className={"HeaderText"}>Sign in</h1>
+                <h1 className={"HeaderText text-4xl font-semibold"}>Sign in</h1>
             <div className={"FormContainer"}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={"formBody"}>
@@ -18,18 +46,18 @@ export default function LoginForm(){
                             required : "Username is required",
                             minLength: 4
                         })} type={"text"} placeholder={"Username"} className={"textInput"}/>
-                        {errors.username &&( <div className={"text-danger"}>{errors.username.message}</div>)}
+                        {errors.username &&( <div className={"text-red-500"}>{errors.username.message}</div>)}
                         <input {...register("password",{
                             required :"Password is required"
                         })} type={"password"} placeholder={"Password"} className={"textInput"}/>
-                        {errors.password &&( <div className={"text-danger"}>{errors.password.message}</div>)}
+                        {errors.password &&( <div className={"text-red-500"}>{errors.password.message}</div>)}
                         <button type={"submit"} disabled={isSubmitting} className={"submitButton"}>
                             {isSubmitting ? "Loading..." : "Submit"}
                         </button>
                     </div>
                 </form>
             </div>
-            <Link className={"redirectAuthLink"} to={"/register"}>New to the website? Register!</Link>
+            <Link className={"redirectAuthLink text-blue-600"} to={"/register"}>New to the website? Register!</Link>
         </div>
 
 
