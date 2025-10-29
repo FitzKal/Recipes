@@ -19,7 +19,7 @@ export default function LoginForm(){
             userLogin(data),
         onSuccess:(result,variables) =>{
             userStore.getState().stateLogin({
-                accessToken: result.token,
+                accessToken: result.accessToken,
                 username:variables.username,
                 role:result.role
             });
