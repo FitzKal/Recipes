@@ -7,6 +7,7 @@ import {useMutation} from "@tanstack/react-query";
 import type {userAuthRequest} from "../Types/User.ts";
 import {userStore} from "../Stores/UserStore.ts";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 
 export default function LoginForm(){
@@ -23,13 +24,14 @@ export default function LoginForm(){
                 username:variables.username,
                 role:result.role
             });
-        navigate("/home")
+        navigate("/home");
+        toast.success("Login Successful")
     },
         onError:(error) =>{
             if (error instanceof Error){
-                alert(error.message);
+                toast.error(error.message);
             }else {
-                alert("Something went wrong");
+                toast.error("Something went wrong");
             }
         }
     })

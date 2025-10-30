@@ -6,10 +6,11 @@ import {userRegister} from "../service/AuthServices.ts";
 import {useMutation} from "@tanstack/react-query";
 import type {userAuthRequest} from "../Types/User.ts";
 import {userStore} from "../Stores/UserStore.ts";
+import {toast} from "react-toastify";
 
 
 export default function RegisterForm(){
-    const {register,handleSubmit ,formState:{errors, isSubmitting}} = useForm<AuthFormFields>();
+    const {register,handleSubmit,formState:{errors, isSubmitting}} = useForm<AuthFormFields>();
 
     const navigate = useNavigate();
 
@@ -22,12 +23,13 @@ export default function RegisterForm(){
                 accessToken: result.accessToken,
             })
             navigate("/home");
+            toast.success("Successful registration!")
         },
         onError:(error) =>{
             if (error instanceof Error){
-                alert(error.message);
+                toast.error(error.message);
             }else {
-                alert("Something went wrong");
+                toast.error("Something went wrong");
             }
         }
     })
