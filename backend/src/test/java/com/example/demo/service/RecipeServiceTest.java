@@ -46,7 +46,7 @@ public class RecipeServiceTest {
     // CREATE RECIPE TESTS
 
     @Test
-    void createRecipe_success() {
+    void createRecipe_correctRecipe_created() {
 
         //Arrange
         String username = "random_user_01";
@@ -101,7 +101,7 @@ public class RecipeServiceTest {
 
 
     @Test
-    void createRecipe_failure() {
+    void createRecipe_invalidRecipe_throwsException() {
 
         // Arrange
         BasicRecipeDto recipeToCreate = new BasicRecipeDto();
@@ -124,7 +124,7 @@ public class RecipeServiceTest {
     // GET RECIPE BY ID TESTS
 
     @Test
-    void getRecipeById_success() {
+    void getRecipeById_correctId_returnRecipe() {
 
         //Arrange
         Long recipeId = 13L;
@@ -161,7 +161,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    void getRecipeById_failure() {
+    void getRecipeById_invalidId_throwsException() {
 
         // Arrange
         Long invalidId = 999L;
@@ -181,7 +181,7 @@ public class RecipeServiceTest {
     // GET ALL RECIPES
 
     @Test
-    void getAllRecipes_success() {
+    void getAllRecipes_haveRecipes_returnRecipes() {
 
         // Arrange
         Recipe recipe1 = new Recipe();
@@ -223,7 +223,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    void getAllRecipes_failure() {
+    void getAllRecipes_noRecipes_returnEmptyList() {
 
         // Arrange
         when(recipeRepo.findAll()).thenReturn(Collections.emptyList());
@@ -242,7 +242,7 @@ public class RecipeServiceTest {
     // UPDATE RECIPE TESTS
 
     @Test
-    void updateRecipe_success() {
+    void updateRecipe_correctRecipe_updatedRecipe() {
 
         //Arrange
         Long recipeId = 42L;
@@ -270,7 +270,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    void updateRecipe_failure() {
+    void updateRecipe_noRecipeToUpdate_throwsException() {
 
         // Arrange
         Long invalidId = 404L;
@@ -296,7 +296,7 @@ public class RecipeServiceTest {
     // DELETE RECIPE TESTS
 
     @Test
-    void deleteRecipe_success() {
+    void deleteRecipe_haveRecipeToDelete_recipeDeleted() {
 
         //Arrange
         Long recipeId = 10L;
@@ -311,7 +311,7 @@ public class RecipeServiceTest {
     }
 
     @Test
-    void deleteRecipe_failure() {
+    void deleteRecipe_noRecipeToDelete_throwsException() {
 
         //Arrange
         Long recipeId = 99L;

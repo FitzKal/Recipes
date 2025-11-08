@@ -38,7 +38,7 @@ public class UserServiceTest {
     // SAVE USER TESTS
 
     @Test
-    void saveUser_success() {
+    void saveUser_correctUser_saved() {
 
         //Arrange
         BasicUserDto userToSave = new BasicUserDto();
@@ -75,7 +75,7 @@ public class UserServiceTest {
 
 
     @Test
-    void saveUser_failure() {
+    void saveUser_invalidUser_throwException() {
 
         //Arrange
         BasicUserDto invalidUser = new BasicUserDto();
@@ -97,7 +97,7 @@ public class UserServiceTest {
     // GET USER BY ID TESTS
 
     @Test
-    void getUserById_success() {
+    void getUserById_correctId_returnUser() {
 
         //Arrange
         Long userId = 8L;
@@ -127,7 +127,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void getUserById_failure() {
+    void getUserById_invalidId_throwException() {
 
         //Arrange
         Long invalidId = 2973L;
@@ -147,7 +147,7 @@ public class UserServiceTest {
     // GET ALL USERS TESTS
 
     @Test
-    void getAllUsers_success() {
+    void getAllUsers_haveUsers_returnUsers() {
         // Arrange
         User user1 = new User();
         user1.setUsername("test0102");
@@ -207,7 +207,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void getAllUsers_failure() {
+    void getAllUsers_noUsers_returnEmptyList() {
 
         // Arrange
         when(userRepo.findAll()).thenReturn(List.of());
@@ -226,7 +226,7 @@ public class UserServiceTest {
     // UPDATE USER TESTS
 
     @Test
-    void updateUser_success() {
+    void updateUser_correctUser_updatedUser() {
         Long userId = 8L;
 
         BasicUserDto userToUpdate = new BasicUserDto();
@@ -256,7 +256,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void updateUser_failure() {
+    void updateUser_noUserToUpdate_throwsException() {
         // Arrange
         Long userId = 9921L;
         BasicUserDto updatedUser = new BasicUserDto();
@@ -277,7 +277,7 @@ public class UserServiceTest {
     // DELETE USER TESTS
 
     @Test
-    void deleteUser_success() {
+    void deleteUser_haveUserToDelete_userDeleted() {
 
         // Arrange
         Long userId = 1L;
@@ -287,7 +287,6 @@ public class UserServiceTest {
         userToDelete.setUsername("testUsername");
         userToDelete.setPassword("testPassword");
         userToDelete.setRole(Role.USER);
-
         when(userRepo.existsById(userId)).thenReturn(true);
 
         // Act
@@ -299,7 +298,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void deleteUser_failure() {
+    void deleteUser_noUserToDelete_throwsException() {
 
         // Arrange
         Long userId = 5L;
