@@ -24,7 +24,7 @@ export default function LoginForm(){
                 username:variables.username,
                 role:result.role
             });
-        navigate("/home");
+        navigate("/dashboard/home");
         toast.success("Login Successful")
     },
         onError:(error) =>{
