@@ -1,32 +1,30 @@
+import type {AuthFormFields} from "../../Types/FormTypes.ts";
 import {type SubmitHandler, useForm} from 'react-hook-form';
-import type {AuthFormFields} from "../Types/FormTypes.ts";
-import {Link} from "react-router-dom";
-import "../styles/AuthForm.css";
-import {userLogin} from "../service/AuthServices.ts";
+import "../../styles/AuthForm.css";
+import {Link, useNavigate} from "react-router-dom";
+import {userRegister} from "../../service/AuthServices.ts";
 import {useMutation} from "@tanstack/react-query";
-import type {userAuthRequest} from "../Types/User.ts";
-import {userStore} from "../Stores/UserStore.ts";
-import {useNavigate} from "react-router-dom";
+import type {userAuthRequest} from "../../Types/User.ts";
+import {userStore} from "../../Stores/UserStore.ts";
 import {toast} from "react-toastify";
 
 
-export default function LoginForm(){
-    const{register, handleSubmit, formState:{errors, isSubmitting}} = useForm<AuthFormFields>();
+export default function RegisterForm(){
+    const {register,handleSubmit,formState:{errors, isSubmitting}} = useForm<AuthFormFields>();
+
     const navigate = useNavigate();
 
-
     const mutation = useMutation({
-        mutationFn:(data:userAuthRequest) =>
-            userLogin(data),
+        mutationFn:(data:userAuthRequest) => userRegister(data),
         onSuccess:(result,variables) =>{
             userStore.getState().stateLogin({
+                username: variables.username,
+                role:result.role,
                 accessToken: result.accessToken,
-                username:variables.username,
-                role:result.role
-            });
-        navigate("/dashboard/home");
-        toast.success("Login Successful")
-    },
+            })
+            navigate("/dashboard/home");
+            toast.success("Successful registration!")
+        },
         onError:(error) =>{
             if (error instanceof Error){
                 toast.error(error.message);
@@ -35,22 +33,31 @@ export default function LoginForm(){
             }
         }
     })
-    const onSubmit: SubmitHandler<AuthFormFields> = async (data) =>{
-        mutation.mutate(data);
+
+    const onSubmit:SubmitHandler<AuthFormFields> = async (data) =>{
+        await mutation.mutate(data);
     }
+
     return(
         <div className={"container"}>
-                <h1 className={"HeaderText text-4xl font-semibold"}>Sign in</h1>
+            <h1 className={"HeaderText text-4xl font-semibold"}>Register</h1>
             <div className={"FormContainer"}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={"formBody"}>
                         <input {...register("username",{
                             required : "Username is required",
-                            minLength: 4
+                            minLength:{
+                                value: 4,
+                                message: "The username should be at least 4 characters long"
+                            }
                         })} type={"text"} placeholder={"Username"} className={"textInput"}/>
                         {errors.username &&( <div className={"text-red-500"}>{errors.username.message}</div>)}
                         <input {...register("password",{
-                            required :"Password is required"
+                            required :"Password is required",
+                            minLength:{
+                                value: 8,
+                                message: "The given password is too weak"
+                            }
                         })} type={"password"} placeholder={"Password"} className={"textInput"}/>
                         {errors.password &&( <div className={"text-red-500"}>{errors.password.message}</div>)}
                         <button type={"submit"} disabled={isSubmitting} className={"submitButton"}>
@@ -59,10 +66,7 @@ export default function LoginForm(){
                     </div>
                 </form>
             </div>
-            <Link className={"redirectAuthLink text-blue-600"} to={"/register"}>New to the website? Register!</Link>
+            <Link className={"redirectAuthLink text-blue-600"} to={"/"}>Already have an account? Sign in!</Link>
         </div>
-
-
     );
-
 }

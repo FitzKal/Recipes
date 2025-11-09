@@ -5,14 +5,14 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import LoginForm from "./components/LoginForm.tsx";
-import RegisterForm from "./components/RegisterForm.tsx";
+import LoginForm from "./components/Auth/LoginForm.tsx";
+import RegisterForm from "./components/Auth/RegisterForm.tsx";
 import App from "./App.tsx";
 import Homepage from "./components/Homepage.tsx";
 import Navbar from "./components/Navbar.tsx";
-import DisplayRecipes from "./components/DisplayRecipes.tsx";
-import MyRecipes from "./components/MyRecipes.tsx";
-import DisplayUsers from "./components/DisplayUsers.tsx";
+import DisplayRecipes from "./components/Recipe/DisplayRecipes.tsx";
+import MyRecipes from "./components/Recipe/MyRecipes.tsx";
+import DisplayUsers from "./components/Admin/DisplayUsers.tsx";
 
 const router = createBrowserRouter([{
         path:'/',
