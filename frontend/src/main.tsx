@@ -9,7 +9,7 @@ import LoginForm from "./components/LoginForm.tsx";
 import RegisterForm from "./components/RegisterForm.tsx";
 import App from "./App.tsx";
 import Homepage from "./components/Homepage.tsx";
-
+import Navbar from "./components/Navbar.tsx";
 
 const router = createBrowserRouter([{
         path:'/',
@@ -26,11 +26,17 @@ const router = createBrowserRouter([{
     },
     {
       path: "/recipes",
-      element:<App />
+      element:<Navigate to={"/login"} />
     },
     {
-        path:"/home",
-        element: <Homepage />
+        path:"/dashboard",
+        element: <Navbar />,
+        children: [
+            {
+                path:"/dashboard/home",
+                element:<Homepage/>
+            }
+        ]
 
     }
     ]);
