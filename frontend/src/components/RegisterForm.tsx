@@ -22,7 +22,7 @@ export default function RegisterForm(){
                 role:result.role,
                 accessToken: result.accessToken,
             })
-            navigate("/home");
+            navigate("/dashboard/home");
             toast.success("Successful registration!")
         },
         onError:(error) =>{
