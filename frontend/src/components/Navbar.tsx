@@ -27,12 +27,12 @@ export default function Navbar(){
                     <Link to={"/dashboard/myRecipes"}
                           className="text-2xl text-white px-3 py-0.5 rounded-2xl
                 transition delay-50 ease-in-out
-                hover:bg-blue-600 hover:text-pink-700">To My Books</Link>
+                hover:bg-blue-600 hover:text-pink-700">To My Recipes</Link>
                 </div>
                 <div className={"flex flex-row gap-4"}>
                     <Link  className="text-2xl text-white px-3 py-0.5 rounded-2xl
                 transition delay-50 ease-in-out
-                hover:bg-blue-600 hover:text-pink-700" to={"/dashboard/recipes"}>To the available books</Link>
+                hover:bg-blue-600 hover:text-pink-700" to={"/dashboard/recipes"}>To the available Recipes</Link>
                 </div>
             </div>
             <Outlet/>

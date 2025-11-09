@@ -10,6 +10,9 @@ import RegisterForm from "./components/RegisterForm.tsx";
 import App from "./App.tsx";
 import Homepage from "./components/Homepage.tsx";
 import Navbar from "./components/Navbar.tsx";
+import DisplayRecipes from "./components/DisplayRecipes.tsx";
+import MyRecipes from "./components/MyRecipes.tsx";
+import DisplayUsers from "./components/DisplayUsers.tsx";
 
 const router = createBrowserRouter([{
         path:'/',
@@ -35,6 +38,18 @@ const router = createBrowserRouter([{
             {
                 path:"/dashboard/home",
                 element:<Homepage/>
+            },
+            {
+             path:"/dashboard/recipes",
+                element:<DisplayRecipes />
+            },
+            {
+                path:"/dashboard/myRecipes",
+                element:<MyRecipes />
+            },
+            {
+                path:"/dashboard/admin",
+                element:<DisplayUsers />
             }
         ]
 
