@@ -7,18 +7,18 @@ export default function Navbar(){
 
     return(
         <div className={"pt-0.5"}>
-            <div className={"NavBarContainer bg-[#8f571b] pb-0.5 flex justify-between rounded-2xl"}>
-                <h1 className={"text-3xl text-white ml-3 "}>Library</h1>
+            <div className={"NavBarContainer bg-blue-400 pb-0.5 flex justify-between rounded-2xl"}>
+                <h1 className={"text-3xl text-white ml-3 "}>Recipes</h1>
                 {currentUser?.role == "ADMIN" ? <div>
                     <Link to={"/dashboard/admin"}
                           className="text-2xl text-white px-3 py-0.5 rounded-2xl
                 transition delay-50 ease-in-out
-                hover:bg-yellow-900 hover:text-blue-400">Users</Link>
+                hover:bg-blue-600 hover:text-pink-700">Users</Link>
                 </div> : <></>}
                 <Link
                     className="text-2xl text-white ml-20 px-3 py-1 rounded-2xl
                 transition delay-50 ease-in-out
-                hover:bg-yellow-900 hover:text-blue-400"
+                hover:bg-blue-600 hover:text-pink-700"
                     to="/dashboard/home"
                 >
                     Home
@@ -27,12 +27,12 @@ export default function Navbar(){
                     <Link to={"/dashboard/myRecipes"}
                           className="text-2xl text-white px-3 py-0.5 rounded-2xl
                 transition delay-50 ease-in-out
-                hover:bg-yellow-900 hover:text-blue-400">To My Books</Link>
+                hover:bg-blue-600 hover:text-pink-700">To My Books</Link>
                 </div>
                 <div className={"flex flex-row gap-4"}>
                     <Link  className="text-2xl text-white px-3 py-0.5 rounded-2xl
                 transition delay-50 ease-in-out
-                hover:bg-yellow-900 hover:text-blue-400" to={"/dashboard/recipes"}>To the available books</Link>
+                hover:bg-blue-600 hover:text-pink-700" to={"/dashboard/recipes"}>To the available books</Link>
                 </div>
             </div>
             <Outlet/>
