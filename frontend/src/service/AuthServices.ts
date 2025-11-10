@@ -39,3 +39,20 @@ export const userRegister = async (registrData: userAuthRequest) => {
     }
 }
 
+// ------------- Logout -------------
+export const userLogout = async (accessToken: string) =>{
+    const res = await fetch("/api/auth/logout",{
+        method:'POST',
+        headers:{
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type" : "application/json",
+        }
+
+    });
+    if(res.ok){
+        return;
+    } else{
+        const message = await res.text();
+        throw new Error(message || "Could not complete request");
+    }
+}
