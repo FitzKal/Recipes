@@ -5,6 +5,7 @@ import com.example.demo.DTOs.LoginResponseDto;
 import com.example.demo.DTOs.RegisterRequestDto;
 import com.example.demo.DTOs.RegisterResponseDto;
 import com.example.demo.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,12 @@ public class AuthController {
         if (m.contains("invalid") || m.contains("not found"))
             return ResponseEntity.status(401).body(ex.getMessage());                             // rossz login
         return ResponseEntity.badRequest().body(ex.getMessage());                                // egyéb
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request){
+        var response = authService.Logout(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 }
