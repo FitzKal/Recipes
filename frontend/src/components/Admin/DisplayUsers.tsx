@@ -1,12 +1,16 @@
 import {userStore} from "../../Stores/UserStore.ts";
 import {useQuery} from "@tanstack/react-query";
 import {usersGetAll} from "../../service/AdminService.ts";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import User from "./User.tsx";
 import type {UserResponse} from "../../Types/User.ts";
+import UserEditForm from "./UserEditForm.tsx";
 
 export default function DisplayUsers(){
+
+    const [isUpdating, setIsUpdating] = useState<boolean>(false);
+    const [userToUpdate, setUserToUpdate] = useState<UserResponse>();
 
     const currentUser = userStore.getState().user;
     const {data,error,isError,isLoading} = useQuery<UserResponse[]>({
@@ -28,18 +32,19 @@ export default function DisplayUsers(){
     useEffect(()=>{
         console.log(data);
     })
-    /*const handleUpdating = (user:UserResponse)=>{
+    const handleUpdating = (user:UserResponse)=>{
         if (!isUpdating){
             setIsUpdating(true);
             setUserToUpdate(user);
         }else {
             setIsUpdating(false);
         }
-    }*/
+    }
 
     return isLoading ? (
         <p>Loading...</p>
     ):(<div className={"flex flex-col mt-10"}>
+        {isUpdating ? <UserEditForm userToUpdate = {userToUpdate}  handleClose = {handleUpdating}/> : <></>}
         <div className="flex justify-center w-auto ml-3">
             <table className="table-auto w-250 border-collapse">
                 <thead className={"border-b-2"}>
@@ -51,7 +56,7 @@ export default function DisplayUsers(){
                 </thead>
                 <tbody className={"border-b-2"}>
                 {(data ?? []).map(r => (
-                    <User key={r.user_id} userInfo={r} />
+                    <User key={r.user_id} userInfo={r} handleUpdating={handleUpdating}/>
                 ))}
                 </tbody>
             </table>
