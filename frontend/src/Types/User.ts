@@ -26,6 +26,7 @@ export type userListProp = {
 
 export type userProp = {
     userInfo : User
+    handleUpdating: (user:UserResponse) => void
 }
 
 export type userAuthRequest  = {
