@@ -8,6 +8,7 @@ import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepo;
 import com.example.demo.security.PasswordEncrypter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +60,10 @@ public class AuthService {
                 .role(user.getRole().name())
                 .accessToken(token)
                 .build();
+    }
+
+    public String Logout(HttpServletRequest request){
+        jwtService.addToBlackList(request);
+        return "Successfully logged out";
     }
 }
