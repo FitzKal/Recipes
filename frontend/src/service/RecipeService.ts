@@ -1,5 +1,5 @@
 // ------------- GetAll -------------
-import type {recipeRequest} from "../Types/Recipe.ts";
+import type {recipeRequest, recipeType} from "../Types/Recipe.ts";
 
 export const getAllRecipes = async (accessToken:string)=>{
     const res = await fetch("/api/recipes",{
@@ -49,5 +49,26 @@ export const postRecipe = async (accessToken:string, recipe:recipeRequest) =>{
     }else {
         const message = await res.text();
         throw new Error(message || "Request could not be completed");
+    }
+}
+
+// ------------- Update -------------
+
+export const updateRecipe = async (accessToken:string,updateRequest:recipeType,id:number) =>{
+    const res = await fetch(`/api/recipes/${id}`,{
+        method: "PUT",
+        headers:{
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type" : "application/json",
+        },
+        body:JSON.stringify(updateRequest),
+    });
+    if (res.ok){
+        const response = await res.json();
+        console.log(response);
+        return response;
+    }else{
+        const message = await res.text();
+        throw new Error(message || "You are not the owner of the recipe, or don't have permission to edit the recipe");
     }
 }
