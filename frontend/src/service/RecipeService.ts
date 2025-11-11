@@ -1,5 +1,5 @@
 // ------------- GetAll -------------
-import type {Recipe} from "../Types/Recipe.ts";
+import type {recipeRequest} from "../Types/Recipe.ts";
 
 export const getAllRecipes = async (accessToken:string)=>{
     const res = await fetch("/api/recipes",{
@@ -33,7 +33,7 @@ export const getRecipeById = async (accessToken:string, recipeId: number | undef
 
 // ------------- Post -------------
 
-export const postRecipe = async (accessToken:string, recipe:Recipe) =>{
+export const postRecipe = async (accessToken:string, recipe:recipeRequest) =>{
     const res = await fetch("/api/recipes",{
         method : 'POST',
         headers: {
