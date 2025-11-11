@@ -16,8 +16,11 @@ public class BasicRecipeDto {
     private Long id;
     private String recipeTitle;
     private String description;
+    private String ingredients;
+    private String instructions;
     private Category category;
     private String pictureSrc;
     @JsonIgnore
     private User user;
+    private String username;
 }

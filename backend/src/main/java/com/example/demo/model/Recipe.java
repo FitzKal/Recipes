@@ -26,6 +26,12 @@ public class Recipe {
     @Column(nullable = false)
     private String description;
 
+    @Column(length = 200000)
+    private String ingredients;
+
+    @Column(length = 200000)
+    private String instructions;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
