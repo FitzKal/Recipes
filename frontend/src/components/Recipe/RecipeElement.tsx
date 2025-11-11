@@ -3,14 +3,20 @@ import {useQueryClient} from "@tanstack/react-query";
 import type {recipeType} from "../../Types/Recipe.ts";
 import Recipe from "./Recipe.tsx";
 
-export default function RecipeElement(recipeProp:{recipe:recipeType}){
+export default function RecipeElement(recipeProp:{recipe:recipeType,setUpdating:(recipe:recipeType)=>void}){
 
     const currentUser = userStore.getState().user;
     const queryClient = useQueryClient();
+    const canEdit = (!!currentUser && (currentUser.username === recipeProp.recipe.username || currentUser.role === "ADMIN"));
+    const hasId = recipeProp.recipe.id != null;
 
 
     return(<div>
         <Recipe recipeInfo={recipeProp.recipe}/>
+        {canEdit
+            ? <button className={"text-l border-2 rounded-2xl ml-10 pl-1 pr-1 w-20 bg-blue-800 " +
+                "text-white transition delay-50 ease-in-out hover:bg-blue-500"}
+                      onClick={() =>recipeProp.setUpdating(recipeProp.recipe)}>Edit</button>:<></> }
 
     </div>);
 }
