@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.DTOs.BasicRecipeDto;
 import com.example.demo.service.RecipeService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,9 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping
-    public ResponseEntity<BasicRecipeDto> createRecipe(@NonNull @RequestBody BasicRecipeDto basicRecipeDto, @RequestParam String username) {
+    public ResponseEntity<BasicRecipeDto> createRecipe(@NonNull @RequestBody BasicRecipeDto basicRecipeDto, HttpServletRequest request) {
         System.out.println(basicRecipeDto);
-        return ResponseEntity.ok(recipeService.createRecipe(basicRecipeDto,username));
+        return ResponseEntity.ok(recipeService.createRecipe(basicRecipeDto,request));
     }
 
     @GetMapping("/{id}")
