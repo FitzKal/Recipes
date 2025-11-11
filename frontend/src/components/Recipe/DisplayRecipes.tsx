@@ -1,13 +1,15 @@
 import {userStore} from "../../Stores/UserStore.ts";
 import {useQuery} from "@tanstack/react-query";
 import {getAllRecipes} from "../../service/RecipeService.ts";
-import {useEffect} from "react";
+import {type MouseEventHandler, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import type {recipeType} from "../../Types/Recipe.ts";
 import RecipeElement from "./RecipeElement.tsx";
+import PostRecipeForm from "./PostRecipeForm.tsx";
 
 export default function DisplayRecipes(){
     const currentUser=  userStore.getState().user;
+    const [isPosting, setPosting] = useState<boolean>(false);
 
     const{data, error, isLoading, isError} = useQuery({
         queryKey:["recipes"],
@@ -26,9 +28,20 @@ export default function DisplayRecipes(){
         }
     }, [error,isError]);
 
+    const handlePosting:MouseEventHandler<HTMLButtonElement> = () =>{
+        if (!isPosting){
+            setPosting(true);
+        }else {
+            setPosting(false);
+        }
+    }
+
     return isLoading ? (
         <p>Loading...</p>
     ) : (<div className={"m-auto"}>
+        <button className={"text-xl border-2 rounded-2xl pl-2 pr-2 mb-10 mt-10 ml-20 bg-blue-200 transition delay-75 ease-in-out hover:bg-blue-400"}
+        onClick={handlePosting}>Add Recipe</button>
+        {(isPosting) ? <PostRecipeForm /> : <></>}
         <div className={"flex flex-wrap justify-center flex-row gap-15 mt-10"}>
             {data.map((recipe:recipeType) =>
                 <RecipeElement key={recipe.id} recipe={recipe} />
