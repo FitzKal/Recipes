@@ -23,3 +23,12 @@ export type recipeType =  {
     user?:User,
     username:string
 }
+
+export type recipeRequest = {
+    recipeTitle:string,
+    description?: string,
+    ingredients: string,
+    instructions: string,
+    category?: "DESSERT" | "SOUP" | "MAIN" | "DRINK",
+    pictureSrc?: string,
+}
