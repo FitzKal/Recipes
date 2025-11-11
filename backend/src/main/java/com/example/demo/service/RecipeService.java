@@ -48,7 +48,11 @@ public class RecipeService {
         return recipeRepo
                 .findAll()
                 .stream()
-                .map(basicRecipeDtoConverter::convertRecipeToBasicRecipeDto)
+                .map(recipe -> {
+                    var response = basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(recipe);
+                    response.setUsername(recipe.getUser().getUsername());
+                    return response;
+                })
                 .toList();
     }
 
