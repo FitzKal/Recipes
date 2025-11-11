@@ -61,9 +61,9 @@ public class RecipeService {
 
        var user = getUserFromRequest(request);
        if (checkOwnerShip(user.getUsername(),recipeToUpdate)){
-           recipeToUpdate.setRecipeTitle(recipeToUpdate.getRecipeTitle());
-           recipeToUpdate.setDescription(recipeToUpdate.getDescription());
-           recipeToUpdate.setIngredients(recipeToUpdate.getIngredients());
+           recipeToUpdate.setRecipeTitle(updatedRecipe.getRecipeTitle());
+           recipeToUpdate.setDescription(updatedRecipe.getDescription());
+           recipeToUpdate.setIngredients(updatedRecipe.getIngredients());
            recipeToUpdate.setInstructions(updatedRecipe.getInstructions());
            recipeToUpdate.setCategory(updatedRecipe.getCategory());
            recipeToUpdate.setPictureSrc(updatedRecipe.getPictureSrc());
