@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.DTOs.BasicRecipeDto;
 import com.example.demo.service.RecipeService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,9 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @PostMapping
-    public ResponseEntity<BasicRecipeDto> createRecipe(@NonNull @RequestBody BasicRecipeDto basicRecipeDto, @RequestParam String username) {
+    public ResponseEntity<BasicRecipeDto> createRecipe(@NonNull @RequestBody BasicRecipeDto basicRecipeDto, HttpServletRequest request) {
         System.out.println(basicRecipeDto);
-        return ResponseEntity.ok(recipeService.createRecipe(basicRecipeDto,username));
+        return ResponseEntity.ok(recipeService.createRecipe(basicRecipeDto,request));
     }
 
     @GetMapping("/{id}")
@@ -33,14 +34,15 @@ public class RecipeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BasicRecipeDto> updateRecipe(@NonNull @PathVariable Long id,
-                                                       @NonNull @RequestBody BasicRecipeDto updateRecipe) {
-        return ResponseEntity.ok(recipeService.updateRecipe(id, updateRecipe));
+                                                       @NonNull @RequestBody BasicRecipeDto updateRecipe,
+                                                       HttpServletRequest request) {
+        return ResponseEntity.ok(recipeService.updateRecipe(id, updateRecipe, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRecipe(@NonNull @PathVariable Long id) {
-        recipeService.deleteRecipe(id);
-        return ResponseEntity.ok("Recipe with the id of:" + id + "has been deleted");
+    public ResponseEntity<String> deleteRecipe(@NonNull @PathVariable Long id, HttpServletRequest request) {
+        recipeService.deleteRecipe(id,request);
+        return ResponseEntity.ok("Recipe with the id of: " + id + " has been deleted");
     }
 
 }
