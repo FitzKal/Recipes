@@ -10,6 +10,7 @@ import com.example.demo.repositories.UserRepo;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,28 +58,36 @@ public class RecipeService {
     }
 
     //UPDATE
-    public BasicRecipeDto updateRecipe(Long id, BasicRecipeDto updatedRecipe) {
-        //var existingRecipe = getRecipeById(id);
-        var existingRecipe = recipeRepo.findById(id).orElseThrow(
-                ()-> new RuntimeException("Recipe not Found")
-        );
-        existingRecipe.setRecipeTitle(updatedRecipe.getRecipeTitle());
-        existingRecipe.setDescription(updatedRecipe.getDescription());
-        existingRecipe.setCategory(updatedRecipe.getCategory());
-        existingRecipe.setPictureSrc(updatedRecipe.getPictureSrc());
-        //createRecipe(existingRecipe);
-        recipeRepo.save(existingRecipe);
+    public BasicRecipeDto updateRecipe(Long id, BasicRecipeDto updatedRecipe, HttpServletRequest request) {
+       var recipeToUpdate = recipeRepo.findById(id).orElseThrow(()->new RuntimeException("Recipe not found"));
 
-        return updatedRecipe;
+       var user = getUserFromRequest(request);
+       if (checkOwnerShip(user.getUsername(),recipeToUpdate)){
+           recipeToUpdate.setRecipeTitle(recipeToUpdate.getRecipeTitle());
+           recipeToUpdate.setDescription(recipeToUpdate.getDescription());
+           recipeToUpdate.setIngredients(recipeToUpdate.getIngredients());
+           recipeToUpdate.setInstructions(updatedRecipe.getInstructions());
+           recipeToUpdate.setCategory(updatedRecipe.getCategory());
+           recipeToUpdate.setPictureSrc(updatedRecipe.getPictureSrc());
+           recipeRepo.save(recipeToUpdate);
+           return updatedRecipe;
+       }else {
+           throw new RuntimeException(
+                   "You are not the owner of the recipe, or don't have permission to edit the recipe"
+           );
+       }
     }
 
     //DELETE
-
-    public void deleteRecipe(Long id) {
-        if (!recipeRepo.existsById(id)) {
-            throw new RuntimeException("Recipe not found with id: " + id);
+    public String deleteRecipe(Long id, HttpServletRequest request) {
+        var recipeToDelete = recipeRepo.findById(id).orElseThrow(() -> new RuntimeException("Recipe was not found"));
+        var user = getUserFromRequest(request);
+        if (checkOwnerShip(user.getUsername(),recipeToDelete)){
+            recipeRepo.deleteById(id);
+            return "Recipe was Deleted";
+        }else {
+            throw new RuntimeException("The delete was not successful");
         }
-        recipeRepo.deleteById(id);
     }
 
     private User getUserFromRequest(HttpServletRequest request) {

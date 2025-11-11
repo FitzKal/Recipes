@@ -34,14 +34,15 @@ public class RecipeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BasicRecipeDto> updateRecipe(@NonNull @PathVariable Long id,
-                                                       @NonNull @RequestBody BasicRecipeDto updateRecipe) {
-        return ResponseEntity.ok(recipeService.updateRecipe(id, updateRecipe));
+                                                       @NonNull @RequestBody BasicRecipeDto updateRecipe,
+                                                       HttpServletRequest request) {
+        return ResponseEntity.ok(recipeService.updateRecipe(id, updateRecipe, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRecipe(@NonNull @PathVariable Long id) {
-        recipeService.deleteRecipe(id);
-        return ResponseEntity.ok("Recipe with the id of:" + id + "has been deleted");
+    public ResponseEntity<String> deleteRecipe(@NonNull @PathVariable Long id, HttpServletRequest request) {
+        recipeService.deleteRecipe(id,request);
+        return ResponseEntity.ok("Recipe with the id of: " + id + " has been deleted");
     }
 
 }
