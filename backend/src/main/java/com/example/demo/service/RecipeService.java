@@ -7,10 +7,8 @@ import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repositories.RecipeRepo;
 import com.example.demo.repositories.UserRepo;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,9 +61,9 @@ public class RecipeService {
 
        var user = getUserFromRequest(request);
        if (checkOwnerShip(user.getUsername(),recipeToUpdate)){
-           recipeToUpdate.setRecipeTitle(recipeToUpdate.getRecipeTitle());
-           recipeToUpdate.setDescription(recipeToUpdate.getDescription());
-           recipeToUpdate.setIngredients(recipeToUpdate.getIngredients());
+           recipeToUpdate.setRecipeTitle(updatedRecipe.getRecipeTitle());
+           recipeToUpdate.setDescription(updatedRecipe.getDescription());
+           recipeToUpdate.setIngredients(updatedRecipe.getIngredients());
            recipeToUpdate.setInstructions(updatedRecipe.getInstructions());
            recipeToUpdate.setCategory(updatedRecipe.getCategory());
            recipeToUpdate.setPictureSrc(updatedRecipe.getPictureSrc());
@@ -79,12 +77,11 @@ public class RecipeService {
     }
 
     //DELETE
-    public String deleteRecipe(Long id, HttpServletRequest request) {
+    public void deleteRecipe(Long id, HttpServletRequest request) {
         var recipeToDelete = recipeRepo.findById(id).orElseThrow(() -> new RuntimeException("Recipe was not found"));
         var user = getUserFromRequest(request);
         if (checkOwnerShip(user.getUsername(),recipeToDelete)){
             recipeRepo.deleteById(id);
-            return "Recipe was Deleted";
         }else {
             throw new RuntimeException("The delete was not successful");
         }
