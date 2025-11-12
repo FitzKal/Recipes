@@ -76,7 +76,7 @@ export const updateRecipe = async (accessToken:string,updateRequest:recipeType,i
 // ------------- Delete -------------
 export const deleteRecipe = async (accessToken:string, id:number) =>{
     const res = await fetch(`/api/recipes/${id}`,{
-        method:"PUT",
+        method:"DELETE",
         headers:{
             Authorization: `Bearer ${accessToken}`,
         }
