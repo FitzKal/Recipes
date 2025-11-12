@@ -72,3 +72,19 @@ export const updateRecipe = async (accessToken:string,updateRequest:recipeType,i
         throw new Error(message || "You are not the owner of the recipe, or don't have permission to edit the recipe");
     }
 }
+
+// ------------- Delete -------------
+export const deleteRecipe = async (accessToken:string, id:number) =>{
+    const res = await fetch(`/api/recipes/${id}`,{
+        method:"PUT",
+        headers:{
+            Authorization: `Bearer ${accessToken}`,
+        }
+    })
+    if (res.ok){
+        return await res.text();
+    }else{
+        const error = await res.text();
+        throw new Error(error || "You are not the owner of the recipe, or don't have permission to delete the recipe");
+    }
+}
