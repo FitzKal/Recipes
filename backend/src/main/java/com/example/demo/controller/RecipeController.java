@@ -45,4 +45,9 @@ public class RecipeController {
         return ResponseEntity.ok("Recipe with the id of: " + id + " has been deleted");
     }
 
+    @GetMapping("/myRecipes")
+    public ResponseEntity<List<BasicRecipeDto>> userBooks(HttpServletRequest request) {
+        return ResponseEntity.ok(recipeService.getUserRecipe(request));
+    }
+
 }

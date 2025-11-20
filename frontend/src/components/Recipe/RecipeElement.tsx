@@ -27,7 +27,7 @@ export default function RecipeElement(recipeProp:{recipe:recipeType,setUpdating:
         onError:(error) =>{
             if (error instanceof Error){
                 console.log(error.message);
-                toast.error(error.message);
+                toast.error("The delete was not successful, you are not the owner of the recipe, or don't have the permission to delete the recipe");
             } else {
                 toast.error("Something went wrong");
             }

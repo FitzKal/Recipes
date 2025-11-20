@@ -74,17 +74,31 @@ export const updateRecipe = async (accessToken:string,updateRequest:recipeType,i
 }
 
 // ------------- Delete -------------
-export const deleteRecipe = async (accessToken:string, id:number) =>{
-    const res = await fetch(`/api/recipes/${id}`,{
-        method:"DELETE",
-        headers:{
+export const deleteRecipe = async (accessToken:string, id:number) => {
+    const res = await fetch(`/api/recipes/${id}`, {
+        method: "DELETE",
+        headers: {
             Authorization: `Bearer ${accessToken}`,
         }
     })
-    if (res.ok){
+    if (res.ok) {
         return await res.text();
-    }else{
+    } else {
         const error = await res.text();
         throw new Error(error || "You are not the owner of the recipe, or don't have permission to delete the recipe");
     }
+}
+    // ------------- GetUserBooks -------------
+    export const getUserRecipe = async (accessToken: string) => {
+        const res = await fetch("/api/recipes/myRecipes", {
+            headers: {Authorization: `Bearer ${accessToken}`},
+        });
+        if (res.ok) {
+            const response = await res.json();
+            console.log(response);
+            return response;
+        } else {
+            const message = await res.text();
+            throw new Error(message || "Request could not be completed");
+        }
 }

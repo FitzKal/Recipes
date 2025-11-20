@@ -87,6 +87,18 @@ public class RecipeService {
         }
     }
 
+    public List<BasicRecipeDto> getUserRecipe(HttpServletRequest request) {
+        var user = getUserFromRequest(request);
+        return recipeRepo.findAll().stream()
+                .map(recipe -> {
+                    var response = basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(recipe);
+                    response.setUsername(recipe.getUser().getUsername());
+                    return response;
+                })
+                .filter(book -> book.getUsername().equals(user.getUsername()))
+                .toList();
+    }
+
     private User getUserFromRequest(HttpServletRequest request) {
         var tokenFromRequest = jwtService.extractTokenFromRequest(request);
         var username = jwtService.getUsernameFromToken(tokenFromRequest);
