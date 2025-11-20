@@ -1,6 +1,6 @@
 import type {AuthFormFields} from "../../Types/FormTypes.ts";
 import {type SubmitHandler, useForm} from 'react-hook-form';
-import "../../styles/AuthForm.css";
+import "../../styles/Auth/AuthForm.css";
 import {Link, useNavigate} from "react-router-dom";
 import {userRegister} from "../../service/AuthServices.ts";
 import {useMutation} from "@tanstack/react-query";
