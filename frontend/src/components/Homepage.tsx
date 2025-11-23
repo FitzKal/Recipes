@@ -1,6 +1,7 @@
 import {userStore} from "../Stores/UserStore.ts";
 import {useNavigate} from "react-router-dom";
 import {useMutation} from "@tanstack/react-query";
+import "../styles/Recipe/Homepage.css";
 import {toast} from "react-toastify";
 import type {MouseEventHandler} from "react";
 import {userLogout} from "../service/AuthServices.ts";
@@ -40,8 +41,7 @@ export default function Homepage(){
         <div>
             <h1 className={"text-[5rem] text-center mt-60"}>Welcome <strong className={"text-blue-700"}>{currentUser?.username ?? ""}</strong></h1>
             <div className={"flex justify-center mt-20"}>
-                <button className={"text-2xl border-2 rounded-2xl pl-2 pr-2 bg-red-800 " +
-                    "text-white transition delay-50 ease-in-out hover:bg-red-500"}
+                <button className={"LogOutButton"}
                         onClick={handleLogout}>Log out</button>
             </div>
         </div>
