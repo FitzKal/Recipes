@@ -40,18 +40,18 @@ export default function User(prop:userProp){
     useEffect(() => {
         console.log(canDelete);
         console.log(isOwnUser);
-    }, []);
+    });
 
     return(
         <tr className="border-b-2 bg-blue-100">
             <td className="px-2 py-1 ">{prop.userInfo.user_id}</td>
             <td className="px-2 py-1 ">{prop.userInfo.username}</td>
             <td className="px-2 py-1 ">{prop.userInfo.role}</td>
-            <td><button className={"rounded-2xl pr-2 pl-2 bg-blue-800 " +
-                "text-white transition delay-50 ease-in-out hover:bg-blue-500"}
+            <td><button className={"rounded-2xl pr-2 pl-2 bg-[#2C4278] " +
+                "text-white transition delay-50 ease-in-out hover:bg-[#3A5A9C]"}
                         onClick={()=> prop.handleUpdating(prop.userInfo)}>Update</button></td>
-           <td>{canDelete ? <button className={"pr-2 pl-2 rounded-2xl w-20 bg-red-800 " +
-                "text-white transition delay-50 ease-in-out hover:bg-red-500"} onClick={() => handleDelete(prop.userInfo.user_id!)}>Delete</button>
+           <td>{canDelete ? <button className={"pr-2 pl-2 rounded-2xl w-20 bg-[#600000] " +
+                "text-white transition delay-50 ease-in-out hover:bg-[#900000]"} onClick={() => handleDelete(prop.userInfo.user_id!)}>Delete</button>
             :<></>}</td>
         </tr>
     );

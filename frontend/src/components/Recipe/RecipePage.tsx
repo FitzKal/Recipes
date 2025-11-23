@@ -33,22 +33,23 @@ export default function RecipePage(){
         <p>Loading...</p>
     ): (
         <div className={"flex flex-col"}>
-            <h1 className={"text-4xl text-center mb-8 mt-8"}>{data.recipeTitle}</h1>
+            <h1 className={"text-4xl text-center text-white mb-8 mt-8"}>{data.recipeTitle}</h1>
             <div className={"flex justify-center mb-3"}>
                 <img className={"h-120 w-80 transition delay-150 duration-300 ease-in-out hover:scale-130"} src={data.pictureSrc} alt={data.recipeTitle}/>
             </div>
-            <div className={"text-center flex flex-col gap-1"}>
-                <h2 className={"text-center text-xl"}>Written by: <strong className={"text-blue-700"}>{data.author}</strong></h2>
-                <p>Genre: <strong className={"text-blue-700"}>{data.category}</strong></p>
-                <p>Added by: <strong className={"text-blue-700"}>{data.username}</strong></p>
+            <div className={"text-center text-white flex flex-col gap-1"}>
+                <h2 className={"text-center text-white text-xl"}>Written by: <strong className={"text-white font-bold"}>{data.author}</strong></h2>
+                <p>Genre: <strong className={"text-white font-bold"}>{data.category}</strong></p>
+                <p>Added by: <strong className={"text-white font-bold"}>{data.username}</strong></p>
             </div>
-            <div className={"mt-5 ml-3 mr-3"}>
-                <h2 className={"text-2xl"}><strong>Description:</strong></h2>
-                <p>{data.description}</p>
-                <h2 className={"text-2xl"}><strong>Ingredients:</strong></h2>
-                <p>{data.ingredients}</p>
-                <h2 className={"text-2xl"}><strong>Instructions:</strong></h2>
-                <p>{data.instructions}</p>
+            <div className={"border-t border-white w-[60%] m-auto mt-10"}></div>
+            <div className={"mt-5 ml-10 mr-10 mb-20"}>
+                <h2 className={"text-2xl text-white mt-5"}><strong>Description:</strong></h2>
+                <p className={"text-white"}>{data.description}</p>
+                <h2 className={"text-2xl text-white mt-5"}><strong>Ingredients:</strong></h2>
+                <p className={"text-white"}>{data.ingredients}</p>
+                <h2 className={"text-2xl text-white mt-5"}><strong>Instructions:</strong></h2>
+                <p className={"text-white"}>{data.instructions}</p>
             </div>
 
         </div>

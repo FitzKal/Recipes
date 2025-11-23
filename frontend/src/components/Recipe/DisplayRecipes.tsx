@@ -50,13 +50,17 @@ export default function DisplayRecipes(){
     }
 
     return isLoading ? (
-        <p>Loading...</p>
-    ) : (<div className={"m-auto"}>
-        <button className={"bg-[#2C4278] text-l text-white border-2 rounded-xl pl-8 pr-8 pt-1 pb-1 mb-10 mt-10 ml-20 transition delay-75 ease-in-out hover:bg-[#3A5A9C]"}
-        onClick={handlePosting}>Add Recipe</button>
+        <p className={"text-white text-2xl"}>Loading...</p>
+    ):(<div className={"m-auto mb-10 pb-10"}>
+        <div className={"flex flex-column justify-between px-50 "}>
+            <h1 className={" text-white text-[36px] mt-10"}>All recipes</h1>
+            <button className={"bg-[#2C4278] text-l text-white border-2 rounded-xl pl-8 pr-8 pt-1 pb-1  mt-13 ml-20 transition delay-75 ease-in-out hover:bg-[#3A5A9C]"}
+                    onClick={handlePosting}>Add Recipe</button>
+        </div>
         {(isPosting) ? <PostRecipeForm /> : <></>}
         {(isUpdating)?<UpdateRecipeForm recipeInfo={toUpdate} manageEditing = {handleUpdating}/>:<></>}
-        <div className={"flex flex-wrap justify-center flex-row gap-15 mt-10"}>
+        <div className={"border-t border-white w-[80%] m-auto mt-5 mb-5"}></div>
+        <div className={"flex flex-wrap justify-center flex-row gap-15 m-10 p-10"}>
             {data.map((recipe:recipeType) =>
                 <RecipeElement key={recipe.id} recipe={recipe} setUpdating={handleUpdating}/>
             )}

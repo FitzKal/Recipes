@@ -21,7 +21,7 @@ services:
     depends_on:
       - postgres
     ports:
-      - "8080:8080"
+      - "9090:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/recipe
       SPRING_DATASOURCE_USERNAME: postgres
@@ -35,7 +35,7 @@ services:
         dockerfile: Dockerfile
       container_name: recipe_frontend
       ports:
-        - "3000:3000"
+        - "5173:5173"
       depends_on:
         - backend
       networks:

@@ -39,7 +39,7 @@ export default function PostRecipeForm(){
         <div className={"flex flex-col justify-center m-auto mb-5"}>
         <div className={"border-t border-white w-[80%] m-auto mt-5 mb-10"}></div>
         <h1 className={"text-center text-white mr-10 text-3xl mb-10 "}>Add a new recipe</h1>
-    <div className={"flex border-2 rounded-2xl p-5 w-250 self-center bg-[#AFBEE3]"}>
+    <div className={"flex border-2 rounded-2xl p-5 mb-10 pt-10 w-250 self-center bg-[#AFBEE3]"}>
     <form onSubmit={handleSubmit(onSubmit)}>
     <div className={"flex fle gap-3 flex-wrap"}>
     <div className={"flex flex-col"}>
