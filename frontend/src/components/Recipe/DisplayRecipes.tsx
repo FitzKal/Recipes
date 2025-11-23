@@ -52,7 +52,7 @@ export default function DisplayRecipes(){
     return isLoading ? (
         <p>Loading...</p>
     ) : (<div className={"m-auto"}>
-        <button className={"text-xl border-2 rounded-2xl pl-2 pr-2 mb-10 mt-10 ml-20 bg-blue-200 transition delay-75 ease-in-out hover:bg-blue-400"}
+        <button className={"bg-[#2C4278] text-xl text-white border-2 rounded-2xl pl-10 pr-10 pt-2 pb-2 mb-10 mt-10 ml-20 transition delay-75 ease-in-out hover:bg-[#3A5A9C]"}
         onClick={handlePosting}>Add Recipe</button>
         {(isPosting) ? <PostRecipeForm /> : <></>}
         {(isUpdating)?<UpdateRecipeForm recipeInfo={toUpdate} manageEditing = {handleUpdating}/>:<></>}

@@ -51,7 +51,7 @@ export default function RegisterForm(){
                                 message: "The username should be at least 4 characters long"
                             }
                         })} type={"text"} placeholder={"Username"} className={"textInput"}/>
-                        {errors.username &&( <div className={"text-red-500"}>{errors.username.message}</div>)}
+                        {errors.username &&( <div className={"text-[#600000]"}>{errors.username.message}</div>)}
                         <input {...register("password",{
                             required :"Password is required",
                             minLength:{
@@ -59,14 +59,14 @@ export default function RegisterForm(){
                                 message: "The given password is too weak"
                             }
                         })} type={"password"} placeholder={"Password"} className={"textInput"}/>
-                        {errors.password &&( <div className={"text-red-500"}>{errors.password.message}</div>)}
+                        {errors.password &&( <div className={"text-[#600000]"}>{errors.password.message}</div>)}
                         <button type={"submit"} disabled={isSubmitting} className={"submitButton"}>
                             {isSubmitting ? "Loading..." : "Submit"}
                         </button>
                     </div>
                 </form>
             </div>
-            <Link className={"redirectAuthLink text-blue-600"} to={"/"}>Already have an account? Sign in!</Link>
+            <Link className={"redirectAuthLink text-white"} to={"/"}>Already have an account? Sign in!</Link>
         </div>
     );
 }

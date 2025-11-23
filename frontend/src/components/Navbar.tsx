@@ -1,7 +1,7 @@
 
 import { Outlet, Link } from "react-router-dom";
 import { userStore } from "../Stores/UserStore";
-import "../styles/Recipe/Homepage.css";
+import "../styles/Homepage.css";
 import { useState } from "react";
 import { useLogout } from "./../service/useLogOut";
 
