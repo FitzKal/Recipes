@@ -48,18 +48,18 @@ export default function LoginForm(){
                             required : "Username is required",
                             minLength: 4
                         })} type={"text"} placeholder={"Username"} className={"textInput"}/>
-                        {errors.username &&( <div className={"text-red-500"}>{errors.username.message}</div>)}
+                        {errors.username &&( <div className={"text-[#600000]"}>{errors.username.message}</div>)}
                         <input {...register("password",{
                             required :"Password is required"
                         })} type={"password"} placeholder={"Password"} className={"textInput"}/>
-                        {errors.password &&( <div className={"text-red-500"}>{errors.password.message}</div>)}
+                        {errors.password &&( <div className={"text-[#600000]"}>{errors.password.message}</div>)}
                         <button type={"submit"} disabled={isSubmitting} className={"submitButton"}>
                             {isSubmitting ? "Loading..." : "Submit"}
                         </button>
                     </div>
                 </form>
             </div>
-            <Link className={"redirectAuthLink text-blue-600"} to={"/register"}>New to the website? Register!</Link>
+            <Link className={"redirectAuthLink text-white"} to={"/register"}>New to the website? Register!</Link>
         </div>
 
 

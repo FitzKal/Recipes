@@ -23,7 +23,7 @@
 .HeaderText {
     text-align: center;
     font-size: 3.75rem;
-    background: linear-gradient(to bottom, #4a4681, #38bdf8);
+    background: linear-gradient(to bottom, #7191D1 , #B0CAFF);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -34,7 +34,7 @@
     width: min(90vw, 50rem);
     margin-inline: auto;
     padding-inline: 1rem;
-    background: linear-gradient(to bottom, #4a4681, #38bdf8);
+    background: linear-gradient(to bottom, #7191D1 , #B0CAFF);
     transition: color, transform 120ms ease;
     height: 5rem;
     font-size: 1.875rem;

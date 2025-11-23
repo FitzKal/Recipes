@@ -7,7 +7,7 @@
 }
 
 .LogOutButton{
-    background-color: red;
+    background-color: #600000;
     width: 70px;
     height: 30px;
     font-size: 16px;
@@ -18,7 +18,7 @@
 }
 
 .LogOutButton:hover{
-    background-color: darkred;
+    background-color: #400000;
 }
 
 .Title{

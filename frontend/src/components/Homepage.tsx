@@ -1,7 +1,7 @@
 import {userStore} from "../Stores/UserStore.ts";
 import {useNavigate} from "react-router-dom";
 import {useMutation} from "@tanstack/react-query";
-import "../styles/Recipe/Homepage.css";
+import "../styles/Homepage.css";
 import {toast} from "react-toastify";
 import type {MouseEventHandler} from "react";
 import {userLogout} from "../service/AuthServices.ts";
