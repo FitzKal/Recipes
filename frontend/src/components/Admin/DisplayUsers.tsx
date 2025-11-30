@@ -45,7 +45,7 @@ export default function DisplayUsers(){
         <p>Loading...</p>
     ):(<div className={"flex flex-col mt-10"}>
         {isUpdating ? <UserEditForm userToUpdate = {userToUpdate}  handleClose = {handleUpdating}/> : <></>}
-        <div className="flex justify-center w-auto ml-3">
+        <div className="flex justify-center w-auto mx-3">
             <table className="table-auto w-250 border-collapse ">
                 <thead className={"border-b-2"}>
                 <tr>

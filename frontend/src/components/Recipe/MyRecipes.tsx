@@ -53,7 +53,7 @@ export default function MyBooks(){
     return isLoading ? (
         <p className={"text-white text-2xl"}>Loading...</p>
     ):(<div className={"m-auto mb-10 pb-10"}>
-            <div className={"flex flex-column justify-between px-50 "}>
+            <div className={"flex flex-column justify-around px-20 "}>
                 <h1 className={" text-white text-[36px] mt-10"}>My recipes</h1>
                 <button className={"bg-[#2C4278] text-l text-white border-2 rounded-xl pl-8 pr-8 pt-1 pb-1  mt-13 ml-20 transition delay-75 ease-in-out hover:bg-[#3A5A9C]"}
                         onClick={handlePosting}>Add Recipe</button>

@@ -51,7 +51,7 @@ export default function UserEditForm(props:{userToUpdate:UserResponse|undefined,
             </div>
             <div className={"border-t border-white w-[80%] m-auto mt-5 mb-10"}></div>
 
-            <div className={"flex border-2 rounded-2xl self-center justify-items-center p-5 w-250 bg-[#AFBEE3]"}>
+            <div className={"flex justify-center w-auto mx-10 border-2 rounded-2xl self-center justify-items-center p-5 max-w-250 bg-[#AFBEE3]"}>
                 <form onSubmit={handleSubmit(onSubmit)} className={"w-full"}>
                     <div className={"flex gap-3 flex-wrap justify-around w-full"}>
                         <div className={"flex flex-col"}>
