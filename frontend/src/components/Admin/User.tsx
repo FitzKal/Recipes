@@ -44,14 +44,14 @@ export default function User(prop:userProp){
 
     return(
         <tr className="border-b-2 bg-blue-100">
-            <td className="px-2 py-1 ">{prop.userInfo.user_id}</td>
-            <td className="px-2 py-1 ">{prop.userInfo.username}</td>
-            <td className="px-2 py-1 ">{prop.userInfo.role}</td>
-            <td><button className={"rounded-2xl pr-2 pl-2 bg-[#2C4278] " +
-                "text-white transition delay-50 ease-in-out hover:bg-[#3A5A9C]"}
+            <td className="px-2 py-3 ">{prop.userInfo.user_id}</td>
+            <td className="px-2 py-3 ">{prop.userInfo.username}</td>
+            <td className="px-2 py-3 ">{prop.userInfo.role}</td>
+            <td><button className={"rounded-2xl px-10 border-2 border-[#2C4278] " +
+                "text-[#2C4278] transition delay-50 ease-in-out hover:text-white hover:bg-[#142040] hover:border-[#142040]"}
                         onClick={()=> prop.handleUpdating(prop.userInfo)}>Update</button></td>
-           <td>{canDelete ? <button className={"pr-2 pl-2 rounded-2xl w-20 bg-[#600000] " +
-                "text-white transition delay-50 ease-in-out hover:bg-[#900000]"} onClick={() => handleDelete(prop.userInfo.user_id!)}>Delete</button>
+           <td className={"px-2 py-3 pr-10 text-right"}>{canDelete ? <button className={"rounded-2xl px-10 border-2 border-[#800000] " +
+                "text-[#800000] transition delay-50 ease-in-out hover:text-white hover:bg-[#400000] hover:border-[#400000]"} onClick={() => handleDelete(prop.userInfo.user_id!)}>Delete</button>
             :<></>}</td>
         </tr>
     );
