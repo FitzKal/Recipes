@@ -46,7 +46,7 @@ export default function DisplayUsers(){
     ):(<div className={"flex flex-col mt-10"}>
         {isUpdating ? <UserEditForm userToUpdate = {userToUpdate}  handleClose = {handleUpdating}/> : <></>}
         <div className="flex justify-center w-auto mx-3">
-            <table className="table-auto w-250 border-collapse ">
+            <table className="table-auto w-250 border-collapse text-black">
                 <thead className={"border-b-2"}>
                 <tr>
                     <th scope="col" className="text-left text-white p-2 border-b">ID</th>
