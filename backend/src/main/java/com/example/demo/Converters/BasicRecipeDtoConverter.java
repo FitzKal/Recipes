@@ -9,5 +9,7 @@ import org.mapstruct.Mapping;
 public interface BasicRecipeDtoConverter {
     BasicRecipeDto convertRecipeToBasicRecipeDto(Recipe recipe);
     @Mapping(target = "user", ignore = true)
+    @Mapping(target = "ingredients", ignore = false)
+    @Mapping(target = "instructions", ignore = false)
     Recipe convertBasicRecipeDtoToRecipe(BasicRecipeDto basicRecipeDto);
 }

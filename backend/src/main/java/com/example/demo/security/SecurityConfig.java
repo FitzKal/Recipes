@@ -3,6 +3,7 @@ package com.example.demo.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -31,7 +32,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
-                       request.requestMatchers("api/**").permitAll().anyRequest().permitAll())
+                       request.requestMatchers(HttpMethod.POST,"/api/auth/register").permitAll()
+                               .requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
+                               .requestMatchers(HttpMethod.POST,"/api/auth/logout").authenticated()
+                               .requestMatchers("/api/recipe/**").hasRole("ADMIN")
+                               .requestMatchers(HttpMethod.GET,"/api/recipes").hasAnyRole("ADMIN","USER")
+                               .requestMatchers(HttpMethod.POST,"/api/recipes").hasAnyRole("ADMIN","USER")
+                               .requestMatchers(HttpMethod.PUT,"/api/recipes").hasAnyRole("ADMIN","USER")
+                               .requestMatchers(HttpMethod.DELETE,"/api/recipes").hasAnyRole("ADMIN","USER")
+                               .anyRequest().authenticated())
                 .sessionManagement(session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
