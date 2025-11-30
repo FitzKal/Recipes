@@ -79,16 +79,16 @@ export default function PostRecipeForm(){
                     })} type={"text"} placeholder={"Instructions"} className={"border-2 bg-white text-center w-75"} />
                     {errors.instructions &&(<div className={"text-[#600000]"}>{errors.instructions.message}</div>)}
                 </div>
-                    <label>Choose a genre: </label>
+                    <label className={"pt-1"}>Choose a category: </label>
                 <select{...register("category",{
                     required:true,
-                })} className={"bg-white border-2 max-h-lh"}>
+                })} className={"bg-white border-2 h-8"}>
                 <option value="DESSERT">Dessert</option>
                     <option value="SOUP">Soup</option>
                     <option value="MAIN">Main</option>
                     <option value="DRINK">Drink</option>
                     </select>
-                    <button type={"submit"} className={"border-2 pr-5 pl-5 ml-1 text-xl text-white bg-[#2C4278] transition delay-75 ease-in-out hover:bg-[#3A5A9C] max-h-10 w-30"}
+                    <button type={"submit"} className={"border-2 border-[#142040] rounded-2xl h-12 w-30 text-white bg-[#2C4278] transition delay-75 ease-in-out hover:bg-[#142040] "}
                     >Post</button>
                     </div>
                     </form>
