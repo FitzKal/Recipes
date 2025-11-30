@@ -250,7 +250,7 @@ public class UserServiceTest {
 
         //Assert
         assertEquals("mogyoro", result.getUsername());
-        assertEquals("arany77", result.getPassword());
+        assertEquals("ezust12", result.getPassword());
         verify(userRepo, times(1)).findById(userId);
         verify(userRepo, times(1)).save(any(User.class));
     }

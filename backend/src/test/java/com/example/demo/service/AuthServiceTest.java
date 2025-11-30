@@ -9,6 +9,7 @@ import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepo;
 import com.example.demo.security.PasswordEncrypter;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -149,6 +150,20 @@ public class AuthServiceTest {
         );
 
         assertEquals("Invalid password!", exception.getMessage());
+    }
+
+
+    @Test
+    void logout_correctRequest_loggedOut() {
+        //Arrange
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        //Act
+        String response = authService.Logout(request);
+
+        //Assert
+        assertEquals("Successfully logged out", response);
+        verify(jwtService, times(1)).addToBlackList(request);
     }
 
 

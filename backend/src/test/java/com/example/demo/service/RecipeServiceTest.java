@@ -8,16 +8,14 @@ import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repositories.RecipeRepo;
 import com.example.demo.repositories.UserRepo;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class RecipeServiceTest {
+class RecipeServiceTest {
 
     @Mock
     private RecipeRepo recipeRepo;
@@ -34,184 +32,164 @@ public class RecipeServiceTest {
     private BasicRecipeDtoConverter basicRecipeDtoConverter;
 
     @Mock
+    private JWTService jwtService;
+
+    @Mock
     private UserRepo userRepo;
+
+    @Mock
+    private HttpServletRequest request;
 
     @InjectMocks
     private RecipeService recipeService;
 
-    @Captor
-    private ArgumentCaptor<Recipe> recipeCaptor;
-
-
-    // CREATE RECIPE TESTS
-
-    @Test
-    void createRecipe_correctRecipe_created() {
-
-        //Arrange
-        String username = "random_user_01";
-
-        User owner = new User();
-        owner.setUsername(username);
-        owner.setPassword("123456789");
-        owner.setRole(Role.USER);
-        owner.setRecipes(new ArrayList<>());
-        userRepo.save(owner);
-
-
-        BasicRecipeDto recipeToCreate = new BasicRecipeDto();
-        recipeToCreate.setRecipeTitle("Test Recipe 01");
-        recipeToCreate.setDescription("This is a recipe description for Test Recipe 01");
-        recipeToCreate.setCategory(Category.DESSERT);
-        recipeToCreate.setPictureSrc("http://example/picture.jpg");
-        recipeToCreate.setUser(owner);
-
-        Recipe converted = new Recipe();
-        converted.setRecipeTitle("Test Recipe 01");
-        converted.setDescription("This is a recipe description for Test Recipe 01");
-        converted.setCategory(Category.DESSERT);
-        converted.setPictureSrc("http://example/picture.jpg");
-
-        when(userRepo.findByUsername(username)).thenReturn(owner);
-        when(basicRecipeDtoConverter.convertBasicRecipeDtoToRecipe(recipeToCreate)).thenReturn(converted);
-
-        //Act
-        BasicRecipeDto createdRecipe = recipeService.createRecipe(recipeToCreate,username);
-
-        //Assert
-        assertNotNull(createdRecipe);
-        assertEquals("Test Recipe 01", createdRecipe.getRecipeTitle());
-        assertEquals("This is a recipe description for Test Recipe 01", createdRecipe.getDescription());
-        assertEquals("http://example/picture.jpg", createdRecipe.getPictureSrc());
-        assertEquals(Category.DESSERT, createdRecipe.getCategory());
-        assertEquals("http://example/picture.jpg", createdRecipe.getPictureSrc());
-        assertEquals(owner, createdRecipe.getUser());
-
-        verify(userRepo, times(1)).findByUsername(username);
-        verify(basicRecipeDtoConverter, times(1)).convertBasicRecipeDtoToRecipe(recipeToCreate);
-        verify(recipeRepo, times(1)).save(recipeCaptor.capture());
-
-        Recipe capturedRecipe = recipeCaptor.getValue();
-        assertEquals("Test Recipe 01", capturedRecipe.getRecipeTitle());
-        assertEquals("This is a recipe description for Test Recipe 01", capturedRecipe.getDescription());
-        assertEquals(Category.DESSERT, capturedRecipe.getCategory());
-        assertEquals("http://example/picture.jpg", capturedRecipe.getPictureSrc());
-        assertEquals(owner, capturedRecipe.getUser());
+    private User createUser(String username, Role role) {
+        User user = new User();
+        user.setUsername(username);
+        user.setRole(role);
+        user.setRecipes(new java.util.ArrayList<>());
+        return user;
     }
 
+    private Recipe createRecipe(Long id, User owner) {
+        Recipe recipe = new Recipe();
+        recipe.setId(id);
+        recipe.setRecipeTitle("Test Recipe");
+        recipe.setDescription("Test description");
+        recipe.setIngredients("ingredients");
+        recipe.setInstructions("instructions");
+        recipe.setCategory(Category.DESSERT); // létező kategória
+        recipe.setPictureSrc("http://example.com/pic.jpg");
+        recipe.setUser(owner);
+        return recipe;
+    }
+
+    private BasicRecipeDto createDto() {
+        BasicRecipeDto dto = new BasicRecipeDto();
+        dto.setRecipeTitle("Test Recipe");
+        dto.setDescription("Test description");
+        dto.setIngredients("ingredients");
+        dto.setInstructions("instructions");
+        dto.setCategory(Category.DESSERT);
+        dto.setPictureSrc("http://example.com/pic.jpg");
+        return dto;
+    }
+
+    private void mockRequestUser(String token, String username, User user) {
+        when(jwtService.extractTokenFromRequest(request)).thenReturn(token);
+        when(jwtService.getUsernameFromToken(token)).thenReturn(username);
+        when(userRepo.findByUsername(username)).thenReturn(user);
+    }
+
+    // ---------- CREATE ----------
 
     @Test
-    void createRecipe_invalidRecipe_throwsException() {
-
+    void createRecipe_validData_returnsDtoWithUsernameAndSavesRecipe() {
         // Arrange
-        BasicRecipeDto recipeToCreate = new BasicRecipeDto();
-        recipeToCreate.setRecipeTitle("Test Recipe 02");
-        recipeToCreate.setDescription("This is a recipe description for Test Recipe 02");
-        recipeToCreate.setCategory(Category.DESSERT);
-        recipeToCreate.setPictureSrc("http://example/picture_02.jpg");
+        User user = createUser("random_user_01", Role.USER);
+        BasicRecipeDto dto = createDto();
+        Recipe recipeEntity = createRecipe(1L, user);
 
+        mockRequestUser("token", "random_user_01", user);
+        when(basicRecipeDtoConverter.convertBasicRecipeDtoToRecipe(dto))
+                .thenReturn(recipeEntity);
+
+        // Act
+        BasicRecipeDto createdRecipe = recipeService.createRecipe(dto, request);
+
+        // Assert
+        assertNotNull(createdRecipe);
+        assertEquals("Test Recipe", createdRecipe.getRecipeTitle());
+        assertEquals("Test description", createdRecipe.getDescription());
+        assertEquals(Category.DESSERT, createdRecipe.getCategory());
+        assertEquals("http://example.com/pic.jpg", createdRecipe.getPictureSrc());
+        assertEquals("random_user_01", createdRecipe.getUsername());
+
+        verify(basicRecipeDtoConverter, times(1)).convertBasicRecipeDtoToRecipe(dto);
+        verify(recipeRepo, times(1)).save(recipeEntity);
+    }
+
+    @Test
+    void createRecipe_invalidUser_throwsExceptionAndDoesNotSave() {
+        // Arrange
+        BasicRecipeDto dto = createDto();
+
+        when(jwtService.extractTokenFromRequest(request)).thenReturn("token");
+        when(jwtService.getUsernameFromToken("token")).thenReturn("invalid_username");
         when(userRepo.findByUsername("invalid_username")).thenReturn(null);
 
         // Act + Assert
-        assertThrows(NullPointerException.class, () ->
-                recipeService.createRecipe(recipeToCreate, "invalid_username")
-        );
+        assertThrows(NullPointerException.class,
+                () -> recipeService.createRecipe(dto, request));
 
-        verify(userRepo, times(1)).findByUsername("invalid_username");
         verify(recipeRepo, never()).save(any());
     }
 
-    // GET RECIPE BY ID TESTS
+    // ---------- GET BY ID ----------
 
     @Test
-    void getRecipeById_correctId_returnRecipe() {
-
-        //Arrange
+    void getRecipeById_correctId_returnRecipeDto() {
+        // Arrange
         Long recipeId = 13L;
 
-        Recipe recipeInRepo = new Recipe();
-        recipeInRepo.setId(recipeId);
-        recipeInRepo.setRecipeTitle("Test Recipe 03");
-        recipeInRepo.setDescription("This is a recipe description for Test Recipe 03");
-        recipeInRepo.setCategory(Category.SOUP);
-        recipeInRepo.setPictureSrc("http://example/picture_03.jpg");
+        User owner = createUser("owner", Role.USER);
+        Recipe recipeInRepo = createRecipe(recipeId, owner);
 
-        BasicRecipeDto convertedDto = new BasicRecipeDto();
-        convertedDto.setRecipeTitle("Test Recipe 03");
-        convertedDto.setDescription("This is a recipe description for Test Recipe 03");
-        convertedDto.setCategory(Category.SOUP);
-        convertedDto.setPictureSrc("http://example/picture_03.jpg");
+        BasicRecipeDto convertedDto = createDto();
 
         when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(recipeInRepo));
-        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(recipeInRepo)).thenReturn(convertedDto);
+        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(recipeInRepo))
+                .thenReturn(convertedDto);
 
-        //Act
+        // Act
         BasicRecipeDto result = recipeService.getRecipeById(recipeId);
 
-        //Assert
+        // Assert
         assertNotNull(result);
-        assertEquals("Test Recipe 03", result.getRecipeTitle());
-        assertEquals("This is a recipe description for Test Recipe 03", result.getDescription());
-        assertEquals("http://example/picture_03.jpg", result.getPictureSrc());
-        assertEquals(Category.SOUP, result.getCategory());
-        assertEquals("http://example/picture_03.jpg", result.getPictureSrc());
+        assertEquals("Test Recipe", result.getRecipeTitle());
+        assertEquals("Test description", result.getDescription());
+        assertEquals(Category.DESSERT, result.getCategory());
+        assertEquals("owner", result.getUsername());
 
         verify(recipeRepo, times(1)).findById(recipeId);
-        verify(basicRecipeDtoConverter, times(1)).convertRecipeToBasicRecipeDto(recipeInRepo);
+        verify(basicRecipeDtoConverter, times(1))
+                .convertRecipeToBasicRecipeDto(recipeInRepo);
     }
 
     @Test
-    void getRecipeById_invalidId_throwsException() {
-
+    void getRecipeById_invalidId_throwsExceptionWithMessage() {
         // Arrange
         Long invalidId = 999L;
         when(recipeRepo.findById(invalidId)).thenReturn(Optional.empty());
 
         // Act + Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                recipeService.getRecipeById(invalidId)
-        );
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> recipeService.getRecipeById(invalidId));
 
         assertEquals("Recipe not found with id: 999", exception.getMessage());
         verify(recipeRepo, times(1)).findById(invalidId);
         verify(basicRecipeDtoConverter, never()).convertRecipeToBasicRecipeDto(any());
     }
 
-
-    // GET ALL RECIPES
+    // ---------- GET ALL ----------
 
     @Test
     void getAllRecipes_haveRecipes_returnRecipes() {
-
         // Arrange
-        Recipe recipe1 = new Recipe();
-        recipe1.setRecipeTitle("Test Recipe 04");
-        recipe1.setDescription("This is a recipe description for Test Recipe 04");
-        recipe1.setCategory(Category.SOUP);
-        recipe1.setPictureSrc("http://example/picture_04.jpg");
+        User u1 = createUser("user1", Role.USER);
+        User u2 = createUser("user2", Role.USER);
 
-        Recipe recipe2 = new Recipe();
-        recipe2.setRecipeTitle("Test Recipe 04");
-        recipe2.setDescription("This is a recipe description for Test Recipe 04");
-        recipe2.setCategory(Category.MAIN_COURSE);
-        recipe2.setPictureSrc("http://example/picture_04.jpg");
+        Recipe recipe1 = createRecipe(1L, u1);
+        Recipe recipe2 = createRecipe(2L, u2);
+
+        BasicRecipeDto dto1 = createDto();
+        BasicRecipeDto dto2 = createDto();
 
         when(recipeRepo.findAll()).thenReturn(List.of(recipe1, recipe2));
-
-        BasicRecipeDto dto1 = new BasicRecipeDto();
-        dto1.setRecipeTitle("Test Recipe 04");
-        dto1.setDescription("This is a recipe description for Test Recipe 04");
-        dto1.setCategory(Category.SOUP);
-        dto1.setPictureSrc("http://example/picture_04.jpg");
-
-        BasicRecipeDto dto2 = new BasicRecipeDto();
-        dto2.setRecipeTitle("Test Recipe 04");
-        dto2.setDescription("This is a recipe description for Test Recipe 04");
-        dto2.setCategory(Category.MAIN_COURSE);
-        dto2.setPictureSrc("http://example/picture_04.jpg");
-
-        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(recipe1)).thenReturn(dto1);
-        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(recipe2)).thenReturn(dto2);
+        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(recipe1))
+                .thenReturn(dto1);
+        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(recipe2))
+                .thenReturn(dto2);
 
         // Act
         List<BasicRecipeDto> result = recipeService.getAllRecipes();
@@ -219,12 +197,12 @@ public class RecipeServiceTest {
         // Assert
         assertEquals(2, result.size());
         verify(recipeRepo, times(1)).findAll();
-        verify(basicRecipeDtoConverter, times(2)).convertRecipeToBasicRecipeDto(any(Recipe.class));
+        verify(basicRecipeDtoConverter, times(2))
+                .convertRecipeToBasicRecipeDto(any(Recipe.class));
     }
 
     @Test
     void getAllRecipes_noRecipes_returnEmptyList() {
-
         // Arrange
         when(recipeRepo.findAll()).thenReturn(Collections.emptyList());
 
@@ -238,94 +216,147 @@ public class RecipeServiceTest {
         verify(basicRecipeDtoConverter, never()).convertRecipeToBasicRecipeDto(any());
     }
 
-
-    // UPDATE RECIPE TESTS
+    // ---------- UPDATE ----------
 
     @Test
-    void updateRecipe_correctRecipe_updatedRecipe() {
-
-        //Arrange
+    void updateRecipe_ownerUser_updatesAndReturnsDto() {
+        // Arrange
         Long recipeId = 42L;
+        User owner = createUser("owner_user", Role.USER);
+        Recipe existingRecipe = createRecipe(recipeId, owner);
 
-        Recipe existingRecipe = new Recipe();
-        existingRecipe.setId(recipeId);
-        existingRecipe.setRecipeTitle("Old Title");
-
-        BasicRecipeDto updatedDto = new BasicRecipeDto();
+        BasicRecipeDto updatedDto = createDto();
         updatedDto.setRecipeTitle("New Title");
         updatedDto.setDescription("Updated Description");
-        updatedDto.setCategory(Category.MAIN_COURSE);
-        updatedDto.setPictureSrc("http://example/new_pic.jpg");
 
+        mockRequestUser("token", "owner_user", owner);
         when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(existingRecipe));
 
         // Act
-        BasicRecipeDto result = recipeService.updateRecipe(recipeId, updatedDto);
+        BasicRecipeDto result = recipeService.updateRecipe(recipeId, updatedDto, request);
 
         // Assert
-        assertEquals("New Title", result.getRecipeTitle());
-        assertEquals("Updated Description", result.getDescription());
+        assertEquals("New Title", existingRecipe.getRecipeTitle());
+        assertEquals("Updated Description", existingRecipe.getDescription());
+        assertSame(updatedDto, result);
         verify(recipeRepo, times(1)).findById(recipeId);
         verify(recipeRepo, times(1)).save(existingRecipe);
     }
 
     @Test
     void updateRecipe_noRecipeToUpdate_throwsException() {
-
         // Arrange
         Long invalidId = 404L;
-        BasicRecipeDto updatedRecipe = new BasicRecipeDto();
-        updatedRecipe.setRecipeTitle("Updated Title");
-        updatedRecipe.setDescription("Updated Description");
-        updatedRecipe.setCategory(Category.DESSERT);
-        updatedRecipe.setPictureSrc("http://example/updated.jpg");
+        BasicRecipeDto updatedRecipe = createDto();
 
         when(recipeRepo.findById(invalidId)).thenReturn(Optional.empty());
 
         // Act + Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                recipeService.updateRecipe(invalidId, updatedRecipe)
-        );
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> recipeService.updateRecipe(invalidId, updatedRecipe, request));
 
-        assertEquals("Recipe not Found", exception.getMessage());
+        assertEquals("Recipe not found", exception.getMessage());
         verify(recipeRepo, times(1)).findById(invalidId);
         verify(recipeRepo, never()).save(any());
     }
 
+    @Test
+    void updateRecipe_nonOwnerUser_throwsExceptionAndDoesNotSave() {
+        // Arrange
+        Long recipeId = 42L;
+        User owner = createUser("owner_user", Role.USER);
+        User other = createUser("other_user", Role.USER);
+        Recipe existingRecipe = createRecipe(recipeId, owner);
 
-    // DELETE RECIPE TESTS
+        mockRequestUser("token", "other_user", other);
+        when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(existingRecipe));
+
+        // Act + Assert
+        assertThrows(RuntimeException.class,
+                () -> recipeService.updateRecipe(recipeId, createDto(), request));
+        verify(recipeRepo, never()).save(any());
+    }
+
+    // ---------- DELETE ----------
 
     @Test
-    void deleteRecipe_haveRecipeToDelete_recipeDeleted() {
-
-        //Arrange
+    void deleteRecipe_ownerUser_deletesSuccessfully() {
+        // Arrange
         Long recipeId = 10L;
-        when(recipeRepo.existsById(recipeId)).thenReturn(true);
+        User owner = createUser("owner_user", Role.USER);
+        Recipe existing = createRecipe(recipeId, owner);
 
-        //Act
-        recipeService.deleteRecipe(recipeId);
+        mockRequestUser("token", "owner_user", owner);
+        when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(existing));
 
-        //Assert
-        verify(recipeRepo, times(1)).existsById(recipeId);
+        // Act
+        recipeService.deleteRecipe(recipeId, request);
+
+        // Assert
         verify(recipeRepo, times(1)).deleteById(recipeId);
     }
 
     @Test
     void deleteRecipe_noRecipeToDelete_throwsException() {
-
-        //Arrange
+        // Arrange
         Long recipeId = 99L;
-        when(recipeRepo.existsById(recipeId)).thenReturn(false);
 
-        //Act + Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                recipeService.deleteRecipe(recipeId)
-        );
+        //mockRequestUser("token", "owner_user", createUser("owner_user", Role.USER));
+        when(recipeRepo.findById(recipeId)).thenReturn(Optional.empty());
 
-        assertEquals("Recipe not found with id: 99", exception.getMessage());
-        verify(recipeRepo, times(1)).existsById(recipeId);
+        // Act + Assert
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> recipeService.deleteRecipe(recipeId, request));
+
+        assertEquals("Recipe was not found", exception.getMessage());
         verify(recipeRepo, never()).deleteById(any());
     }
 
+    @Test
+    void deleteRecipe_nonOwnerUser_throwsExceptionAndDoesNotDelete() {
+        // Arrange
+        Long recipeId = 10L;
+        User owner = createUser("owner_user", Role.USER);
+        User other = createUser("other_user", Role.USER);
+        Recipe existing = createRecipe(recipeId, owner);
 
+        mockRequestUser("token", "other_user", other);
+        when(recipeRepo.findById(recipeId)).thenReturn(Optional.of(existing));
+
+        // Act + Assert
+        assertThrows(RuntimeException.class,
+                () -> recipeService.deleteRecipe(recipeId, request));
+        verify(recipeRepo, never()).deleteById(anyLong());
+    }
+
+    // ---------- GET USER RECIPES ----------
+
+    @Test
+    void getUserRecipe_returnsOnlyRecipesOfLoggedInUser() {
+        // Arrange
+        User vera = createUser("vera", Role.USER);
+        User bence = createUser("bence", Role.USER);
+
+        Recipe r1 = createRecipe(1L, vera);
+        Recipe r2 = createRecipe(2L, bence);
+        Recipe r3 = createRecipe(3L, vera);
+
+        BasicRecipeDto dto1 = createDto();
+        BasicRecipeDto dto2 = createDto();
+        BasicRecipeDto dto3 = createDto();
+
+        mockRequestUser("token", "vera", vera);
+
+        when(recipeRepo.findAll()).thenReturn(List.of(r1, r2, r3));
+        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(r1)).thenReturn(dto1);
+        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(r2)).thenReturn(dto2);
+        when(basicRecipeDtoConverter.convertRecipeToBasicRecipeDto(r3)).thenReturn(dto3);
+
+        // Act
+        List<BasicRecipeDto> result = recipeService.getUserRecipe(request);
+
+        // Assert
+        assertEquals(2, result.size());
+        assertTrue(result.stream().allMatch(r -> "vera".equals(r.getUsername())));
+    }
 }
