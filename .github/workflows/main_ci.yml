@@ -1,0 +1,101 @@
+# This pipeline runs Continuous Integration (CI) and pushes finalized 
+# Docker images to a container registry (CD).
+
+name: CI/CD Pipeline
+
+# Trigger the workflow on pushes or pull requests to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      
+env:
+  # Define variables used across all jobs
+  REGISTRY: ghcr.io # Use GitHub Container Registry (GHCR)
+  # NOTE: github.repository is usually 'username/repo-name'.
+  IMAGE_REPO_BACKEND: ${{ github.repository }}/backend
+  IMAGE_REPO_FRONTEND: ${{ github.repository }}/frontend
+
+jobs:
+  # ========================================
+  # Job 1: Build and Push Backend Image (Spring Boot/Maven)
+  # ========================================
+  build-backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          # Uses the GITHUB_TOKEN which is automatically available
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ⚙️ Set up Docker Buildx (for multi-arch images)
+        uses: docker/setup-buildx-action@v3
+
+      - name: 📦 Build and Push Backend Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend # Uses the backend directory as context
+          file: ./backend/Dockerfile # Path to the Dockerfile
+          push: true
+          # Tag with the commit hash for unique identification
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_REPO_BACKEND }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ========================================
+  # Job 2: Build and Push Frontend Image (React/Vite)
+  # ========================================
+  build-frontend:
+    runs-on: ubuntu-latest
+    # Wait for the backend to finish building first
+    needs: build-backend 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Frontend Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend # Uses the frontend directory as context
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_REPO_FRONTEND }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ========================================
+  # Job 3: Deployment (Placeholder for future)
+  # ========================================
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build-backend, build-frontend]
+    # Only run deployment on merges/pushes to the main branch, not PRs
+    if: github.ref == 'refs/heads/main' 
+    
+    steps:
+      - name: Deployment Placeholder
+        run: |
+          echo "--- Deployment Target ---"
+          echo "Images are built and available at GHCR."
+          echo "Next step: Implement actual deployment scripts here."
