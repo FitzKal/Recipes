@@ -196,7 +196,33 @@
 				</configuration>
 			</plugin>
 
-		</plugins>
-	</build>
+            <!-- ===================== Jacoco Coverage Plugin ===================== -->
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.10</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- Attaches Jacoco to the test JVM -->
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <!-- Generates the final HTML/XML coverage reports -->
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+        </plugins>
+    </build>
+
 
 </project>
