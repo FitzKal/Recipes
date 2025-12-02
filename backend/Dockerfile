@@ -5,6 +5,7 @@ FROM maven:3.9-eclipse-temurin-23 AS builder
 WORKDIR /app
 
 COPY pom.xml ./
+COPY config ./config
 COPY src ./src
 RUN mvn package -DskipTests
 
